@@ -4,6 +4,10 @@ using ChainRulesTestUtils
 using FiniteDifferences
 using StatsFuns
 
+Random.seed!(34567)
+
+rng = MersenneTwister(123)
+
 # Currently, most of the tests for NegativeBinomial are in the "ref" folder.
 # Eventually, we might want to consolidate the tests here
 
@@ -37,26 +41,26 @@ end
 end
 
 @testset "Check the corner case p==1" begin
-    for r in randexp(10)
+    for r in randexp(rng, 10)
         d = NegativeBinomial(r, 1.0)
         @test @inferred(logpdf(d, 0)) === 0.0
         @test @inferred(logpdf(d, -1)) === -Inf
         @test @inferred(logpdf(d, 1)) === -Inf
-        @test all(iszero, rand(d, 10))
+        @test all(iszero, rand(rng, d, 10))
     end
 end
 
 @testset "Check the corner case k==0" begin
-	for r in randexp(5), p in rand(5)
+	for r in randexp(rng, 5), p in rand(rng, 5)
         @test @inferred(logpdf(NegativeBinomial(r, p), 0)) === xlogy(r, p)
     end
 end
 
 @testset "rrule: logpdf of NegativeBinomial" begin
-    r = randexp()
+    r = randexp(rng)
 
     # Test with values in and outside of support
-    p = rand()
+    p = rand(rng)
     dist = NegativeBinomial(r, p)
     fdm = central_fdm(5, 1; max_range=min(r, p, 1-p)/2) # avoids numerical issues with finite differencing
     for k in (0, 10, 42, -1, -5, -13)

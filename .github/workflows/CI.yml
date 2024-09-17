@@ -1,13 +1,7 @@
 name: CI
 
-on:
-  pull_request:
-  push:
-    branches:
-      - master
-    tags: '*'
-  workflow_dispatch:
-  merge_group:
+on: push
+
 
 concurrency:
   # Skip intermediate builds: always.
@@ -23,13 +17,26 @@ jobs:
       fail-fast: false
       matrix:
         version:
-          - '1.3'
-          - '1'
+          - '1.10'
+          - '1.9'
+          - '1.8'
+          - '1.7'
+          - '1.6'
           - pre
         os:
           - ubuntu-latest
           - macos-latest
           - windows-latest
+        include:
+          - version: '1.7'
+            os: macos-12
+          - version: '1.6'
+            os: macos-12
+        exclude:
+          - version: '1.7'
+            os: macos-latest
+          - version: '1.6'
+            os: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
@@ -47,11 +54,6 @@ jobs:
             Pkg.instantiate()'
       - run: julia --project=perf perf/samplers.jl
       - uses: julia-actions/julia-processcoverage@v1
-      - uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # required
-          fail_ci_if_error: true
-          files: lcov.info
   docs:
     name: Documentation
     runs-on: ubuntu-latest

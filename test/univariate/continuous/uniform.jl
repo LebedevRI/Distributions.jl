@@ -6,17 +6,21 @@ using StatsFuns
 using Random
 using Test
 
+Random.seed!(34567)
+
+rng = MersenneTwister(123)
+
 @testset "uniform.jl" begin
     # affine transformations
-    test_affine_transformations(Uniform, rand(), 4 + rand())
+    test_affine_transformations(Uniform, rand(rng), 4 + rand(rng))
     test_cgf(Uniform(0,1),         (1, -1, 100f0, 1e6, -1e6))
     test_cgf(Uniform(100f0,101f0), (1, -1, 100f0, 1e6, -1e6))
 
     @testset "ChainRules" begin
         # run test suite for values in the support
-        dist = Uniform(- 1 - rand(), 1 + rand())
+        dist = Uniform(- 1 - rand(rng), 1 + rand(rng))
         tangent = ChainRulesTestUtils.Tangent{Uniform{Float64}}(; a=randn(), b=randn())
-        for x in (rand(), -rand())
+        for x in (rand(rng), -rand(rng))
             test_frule(logpdf, dist ⊢ tangent, x)
             test_rrule(logpdf, dist ⊢ tangent, x)
         end

@@ -3,14 +3,18 @@ using StatsAPI: pvalue
 
 using Test
 
+Random.seed!(34567)
+
+rng = MersenneTwister(123)
+
 @testset "pvalue" begin
     # For two discrete and two continuous distribution
     for dist in (Binomial(10, 0.3), Poisson(0.3), Normal(1.4, 2.1), Gamma(1.9, 0.8))
         # Draw sample
-        x = rand(dist)
+        x = rand(rng, dist)
 
         # Draw 10^6 additional samples
-        ys = rand(dist, 1_000_000)
+        ys = rand(rng, dist, 1_000_000)
 
         # Check that empirical frequencies match pvalues of left/right tail approximately
         @test pvalue(dist, x; tail=:left) ≈ mean(≤(x), ys) rtol=5e-3
