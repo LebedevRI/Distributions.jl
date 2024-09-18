@@ -167,6 +167,61 @@ printstyled("Running tests:\n", color=:blue)
 
 Random.seed!(345679)
 
+rng = MersenneTwister(345679)
+
+function Random.seed!(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.seed!(rng, args...)
+    end
+    Random.seed!(args...)
+end
+
+function rand(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.rand(rng, args...)
+    end
+    Random.rand(args...)
+end
+function rand!(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.rand!(rng, args...)
+    end
+    Random.rand!(args...)
+end
+
+function randn(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.randn(rng, args...)
+    end
+    Random.randn(args...)
+end
+function randn!(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.randn!(rng, args...)
+    end
+    Random.randn!(args...)
+end
+
+function randexp(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.randexp(rng, args...)
+    end
+    Random.randexp(args...)
+end
+function randexp!(args...)
+    if length(args) > 0 && !(args[1] isa AbstractRNG)
+        # @assert false && "RNG must be explicitly provided"
+        Random.randexp!(rng, args...)
+    end
+    Random.randexp!(args...)
+end
+
 # to reduce redundancy, we might break this file down into separate `$t * "_utils.jl"` files
 include("testutils.jl")
 
