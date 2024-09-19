@@ -6,6 +6,7 @@ using Random
 using SpecialFunctions
 using StatsBase
 using LinearAlgebra
+using StableRNGs
 
 import JSON
 import ForwardDiff
@@ -167,7 +168,7 @@ printstyled("Running tests:\n", color=:blue)
 
 Random.seed!(345679)
 
-rng = MersenneTwister(123456)
+rng = StableRNG(345679)
 
 function Random.seed!(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
@@ -180,14 +181,14 @@ end
 function rand(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.rand(rng, args...)
+        rand(rng, args...)
     end
     Random.rand(args...)
 end
 function rand!(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.rand!(rng, args...)
+        rand!(rng, args...)
     end
     Random.rand!(args...)
 end
@@ -195,14 +196,14 @@ end
 function randn(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.randn(rng, args...)
+        randn(rng, args...)
     end
     Random.randn(args...)
 end
 function randn!(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.randn!(rng, args...)
+        randn!(rng, args...)
     end
     Random.randn!(args...)
 end
@@ -210,14 +211,14 @@ end
 function randexp(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.randexp(rng, args...)
+        randexp(rng, args...)
     end
     Random.randexp(args...)
 end
 function randexp!(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
         # @assert false && "RNG must be explicitly provided"
-        Random.randexp!(rng, args...)
+        randexp!(rng, args...)
     end
     Random.randexp!(args...)
 end
