@@ -38,7 +38,7 @@ using Test
 
     @testset "Special cases" begin
         μ = randn()
-        α = Random.randexp()
+        α = randexp()
         for (d, dref) in (
             (PGeneralizedGaussian(μ, α, 1), Laplace(μ, α)), # p = 1 (Laplace)
             (PGeneralizedGaussian(), Normal()), # p = 2 (standard normal)
@@ -80,8 +80,8 @@ using Test
 
     @testset "Non-special case" begin
         μ = randn()
-        α = Random.randexp()
-        p = Random.randexp()
+        α = randexp()
+        p = randexp()
         d = PGeneralizedGaussian(μ, α, p)
 
         @test minimum(d) == -Inf
