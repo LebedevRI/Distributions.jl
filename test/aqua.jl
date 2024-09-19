@@ -9,9 +9,6 @@ import Aqua
     Aqua.test_all(
         Distributions;
         ambiguities = false,
-        # On older Julia versions, installed dependencies are quite old
-        # Thus unbound type parameters show up that are fixed in newer versions
-        unbound_args = VERSION >= v"1.6",
     )
     # Tests are not reliable on older Julia versions and
     # show ambiguities in loaded packages
