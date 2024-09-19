@@ -167,7 +167,7 @@ printstyled("Running tests:\n", color=:blue)
 
 Random.seed!(345679)
 
-rng = MersenneTwister(345679)
+rng = MersenneTwister(123456)
 
 function Random.seed!(args...)
     if length(args) > 0 && !(args[1] isa AbstractRNG)
